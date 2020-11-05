@@ -17,6 +17,17 @@ connection.connect(function (err) {
     main();
 });
 
+// function test() {
+//     connection.end();
+//     connection.query("SELECT * FROM employee", function (err, res) {
+//         if (err) throw err;
+//         res.forEach(function (i) {
+//             console.log("\n--------- Employee Id: " + red(i.id) + " ------------")
+//             console.log(green("First Name: ") + blue(i.first_name) + green("\nLast Name: $") + blue(i.last_name) + green("\nRole: ") + blue(i.role_id));
+//         })
+//     })
+// }
+
 let blue = chalk.blue;
 let green = chalk.green;
 let red = chalk.red;
@@ -28,22 +39,32 @@ function main() {
         name: "choice",
         type: "list",
         message: "What would you like to do?",
-        choices: ["View All Employees By Department", "View All Employees", "Add Employee", "Remove Employee", "Update Employee", "Update Employee Role", "Update Employee Manager", "View All Roles"]
+        choices: ["View All Employees", "View All Departments", "View All Roles", "Add Employee", "Add Depertment", "Add Role", "Update Employee Role"]
     }).then(answers => {
-        switch (answers.choices) {
+        switch (answers.choice) {
             case ("View All Employees"):
                 viewAllEmployees();
                 break;
-            case ("View All Employees By Department"):
-
+            case ("View All Departments"):
+                viewAllDepartments();
                 break;
-            case ("Add to Inventory"):
-
+            case ("View All Roles"):
+                viewAllRoles();
                 break;
-            case ("Add New Product"):
-
+            case ("Add Employee"):
+                addEmployee();
+                break;
+            case ("Add Department"):
+                addDepartment();
+                break;
+            case ("Add Role"):
+                addRole();
+                break;
+            case ("Update Employee Role"):
+                updateEmployeeRole();
                 break;
             case ("Exit"):
+                connection.end();
                 console.end();
                 break;
         }
@@ -51,13 +72,20 @@ function main() {
 }
 
 function viewAllEmployees() {
-    connection.query("SELECT * FROM employee", (err, data) => {
+    // console.table(res)
+    connection.query("SELECT CONCAT_WS(', ', last_name, first_name) AS 'Name', roles.title AS 'Role' FROM employee LEFT OUTER JOIN roles ON employee.role_id = roles.id", (err, res) => {
         if (err) throw err;
-        data.forEach(function (i) {
-            console.log("\n--------- Employee Id: " + red(i.id) + " ------------")
-            console.log(green("First Name: ") + blue(i.first_name) + green("\nLast Name: $") + blue(i.last_name) + green("\nRole: ") + blue(i.role_id));
+        res.forEach(function (i) {
+            console.table(i);
         })
     })
 }
 
-connection.end();
+function viewAllDepartments() {
+    connection.query("SELECT * FROM department", (err, res) => {
+        if (err) throw err;
+        res.forEach(function (i) {
+            console.table(i);
+        })
+    })
+}
