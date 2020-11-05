@@ -20,10 +20,10 @@ connection.connect(function(err){
 
 function main () {
     inquirer.prompt ({
-        name: "postBid",
+        name: "choice",
         type: "list",
-        message: "Do you want to start a bid?",
-        choices: ["post", "bid", "end"]
+        message: "What would you like to do?",
+        choices: ["View All Employees By Department", "View All Employees", "Add Employee", "Remove Employee", "Update Employee", "Update Employee Role", "Update Employee Manager", "View All Roles"]
     })
 }
 
